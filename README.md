@@ -1,3 +1,5 @@
+🎉 **本 skill 是 [Linux Do](https://linux.do) 社区的友链项目** — 欢迎在 Linux Do 分享使用体验
+
 # company-due-diligence · 公司求职风险背调 Skill
 
 > **项目初衷（作者原话）**：这是一个关于背调公司的 skills。用于关注公司的劳动仲裁信息，
@@ -16,8 +18,6 @@ scripts that mimic a real browser (TLS fingerprinting); the LLM does the analysi
 
 [English](#english-readme) ｜ [中文文档](#) ｜ License: [GPL-3.0](./LICENSE)
 
----
-[![Linux Do](https://img.shields.io/badge/Linux%20Do-Friend-0A85D1?style=flat-square&logo=linux&logoColor=white)](https://linux.do)
 
 
 ## ✨ 功能特性
