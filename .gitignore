@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+venv/
+env/
+.venv/
+
+# 输出 / 缓存 / 临时
+output/
+data/cache/
+*.db
+*.db-journal
+config.json
+.python-version
+
+# Web UI 临时 / 浏览器
+.venv/
+.cookies/
+browser_data/
+debug_*.log
+*.har
+
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 凭据 / 私有（千万别推）
+.env
+.env.local
+*.pem
+*.key
+GITHUB_TOKEN*
+
+# 大文件 / 数据集
+*.zip
+*.tar.gz
+*.parquet
+screenshot.png

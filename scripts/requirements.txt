@@ -1,0 +1,10 @@
+# company-due-diligence skill — L1 必需
+curl_cffi>=0.7
+beautifulsoup4>=4.12
+lxml>=5.0
+
+# L2 可选：真实 Chrome 抓取（需本机安装 Chrome）
+# undetected-chromedriver>=3.5
+
+# L3 可选：指纹浏览器 CDP 取回
+# websocket-client>=1.7

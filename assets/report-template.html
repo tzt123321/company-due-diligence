@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公司求职风险背调报告</title>
+<style>
+  :root{
+    --green:#16a34a; --yellow:#d97706; --red:#dc2626; --gray:#6b7280;
+    --bg:#f4f5f7; --card:#ffffff; --line:#e5e7eb; --text:#111827; --muted:#6b7280;
+    --blue:#2563eb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding:24px}
+  .wrap{max-width:960px;margin:0 auto}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  h1{font-size:24px;margin-bottom:4px}
+  h2{font-size:17px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .meta{color:var(--muted);font-size:13px;margin-bottom:12px}
+  /* header */
+  .header{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+  .score-ring{position:relative;width:110px;height:110px;flex-shrink:0}
+  .score-ring svg{transform:rotate(-90deg)}
+  .score-ring .num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:26px;font-weight:700}
+  .score-ring .num small{font-size:11px;color:var(--muted);font-weight:400}
+  .summary{flex:1;min-width:240px}
+  .light{display:inline-block;padding:4px 14px;border-radius:99px;color:#fff;font-weight:600;font-size:14px;margin-bottom:8px}
+  .light.green{background:var(--green)} .light.yellow{background:var(--yellow)} .light.red{background:var(--red)}
+  .reasons{margin-top:8px;font-size:13px;color:var(--muted)}
+  /* tables */
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:13px;background:#fafafa}
+  .badge{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}
+  .b-hit{background:#fee2e2;color:var(--red)}
+  .b-unverified{background:#fef3c7;color:#92400e}
+  .b-clean{background:#dcfce7;color:var(--green)}
+  .sev-severe{background:#fee2e2;color:var(--red)} .sev-medium{background:#fef3c7;color:#92400e} .sev-low{background:#e0f2fe;color:#0369a1}
+  a{color:var(--blue);text-decoration:none;word-break:break-all}
+  a:hover{text-decoration:underline}
+  .src{color:var(--muted);font-size:12px}
+  /* pitfalls */
+  .pit{display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line)}
+  .pit:last-child{border-bottom:none}
+  .pit .idx{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:#fee2e2;color:var(--red);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+  .pit .body b{display:block;margin-bottom:2px}
+  .pit .ev{font-size:12px;color:var(--muted)}
+  /* checklist */
+  .check{display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line);cursor:pointer;align-items:flex-start}
+  .check input{margin-top:5px;accent-color:var(--blue)}
+  .check.done{color:var(--muted);text-decoration:line-through}
+  /* manual */
+  .manual{font-size:14px}
+  .manual li{margin-bottom:10px}
+  .manual .what{color:var(--muted);font-size:13px}
+  .kw{display:inline-block;background:#f3f4f6;border:1px solid var(--line);border-radius:6px;padding:1px 8px;font-size:12px;margin:2px 4px 2px 0;font-family:Consolas,monospace}
+  .sig-row{display:flex;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px}
+  .sig-row:last-child{border-bottom:none}
+  .sig-row .n{min-width:150px;font-weight:600}
+  .tog{font-size:12px;color:var(--muted)}
+  .empty{color:var(--muted);font-size:13px}
+  footer{color:var(--muted);font-size:12px;text-align:center;margin-top:24px}
+  .tag{display:inline-block;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;border-radius:6px;padding:1px 8px;font-size:12px;margin:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ 头部 ============ -->
+  <div class="card">
+    <div class="header">
+      <div class="score-ring">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle cx="55" cy="55" r="46" fill="none" stroke="#e5e7eb" stroke-width="10"/>
+          <circle id="ring" cx="55" cy="55" r="46" fill="none" stroke="#16a34a" stroke-width="10"
+                  stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="0"/>
+        </svg>
+        <div class="num"><span id="points">--</span><small>/ 100</small></div>
+      </div>
+      <div class="summary">
+        <h1 id="company">--</h1>
+        <div><span id="light" class="light green">--</span> <span id="conf" class="src"></span></div>
+        <div id="summary-text" class="src" style="margin-top:4px"></div>
+        <div class="meta" id="meta"></div>
+        <div id="tags"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 红线核验表 ============ -->
+  <div class="card">
+    <h2>🚨 红线核验表（7 条 · 一票否决）</h2>
+    <table>
+      <thead><tr><th style="width:34px">#</th><th>红线</th><th style="width:110px">状态</th><th>证据</th></tr></thead>
+      <tbody id="redline-body"></tbody>
+    </table>
+    <p class="tog" style="margin-top:10px">未验证 ≠ 无风险：官方渠道（裁判文书网/执行公开网/工商系统）需验证码，脚本无法自动核验，请人工打开链接确认。</p>
+  </div>
+
+  <!-- ============ 风险信号 ============ -->
+  <div class="card">
+    <h2>⚠️ 风险信号扫描</h2>
+    <div id="signals"></div>
+  </div>
+
+  <!-- ============ 坑点清单 ============ -->
+  <div class="card">
+    <h2>🕳️ 坑点清单（投递前必读）</h2>
+    <div id="pitfalls"><p class="empty">暂无信号级坑点，仍需注意通用风险（合同主体/社保主体/试用期）。</p></div>
+  </div>
+
+  <!-- ============ 面试提问清单 ============ -->
+  <div class="card">
+    <h2>🗣️ 面试重点提问清单 <span class="tog">（点击勾选，面试前过一遍）</span></h2>
+    <div id="questions"></div>
+  </div>
+
+  <!-- ============ 员工评价入口 ============ -->
+  <div class="card">
+    <h2>💬 员工评价入口 <span class="tog">（请自行打开原文阅读，本报告不抓取评价内容）</span></h2>
+    <div id="reviews"><p class="empty">无评价入口线索。</p></div>
+  </div>
+
+  <!-- ============ 新闻线索 ============ -->
+  <div class="card">
+    <h2>📰 新闻线索</h2>
+    <div id="news"><p class="empty">无新闻线索。</p></div>
+  </div>
+
+  <!-- ============ manual_required ============ -->
+  <div class="card">
+    <h2>📋 需要人工核实的事项（manual_required）</h2>
+    <ol class="manual" id="manual"></ol>
+  </div>
+
+  <footer>由 company-due-diligence skill 自动生成 · 未验证 ≠ 无风险 · 决策权在你自己</footer>
+</div>
+
+<script id="report-data" type="application/json">__REPORT_JSON__</script>
+<script>
+(function(){
+  const el = document.getElementById("report-data");
+  let R = {};
+  try { R = JSON.parse(el.textContent); } catch(e){}
+  if (!R || !R.company) { document.getElementById("company").textContent = "数据未注入"; return; }
+
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const link = (u, t) => u ? `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t || u)}</a>` : esc(t || "—");
+
+  // ---- 头部 ----
+  document.getElementById("company").textContent = R.company;
+  const score = R.score || {};
+  document.getElementById("points").textContent = score.points ?? "--";
+  const light = document.getElementById("light");
+  light.textContent = score.light === "green" ? "🟢 绿灯" : score.light === "yellow" ? "🟡 黄灯" : "🔴 红灯";
+  light.className = "light " + (score.light || "green");
+  document.getElementById("summary-text").textContent = score.summary || "";
+  const m = R.meta || {};
+  document.getElementById("meta").textContent = `生成时间 ${m.time || "--"} · 耗时 ${m.duration ?? "--"}s · 缓存 ${m.cache_hit ? "命中" : "未命中"}`;
+  const ring = document.getElementById("ring");
+  const pct = Math.max(0, Math.min(100, score.points || 0)) / 100;
+  ring.style.strokeDashoffset = String(289 * (1 - pct));
+  ring.style.stroke = score.light === "green" ? "#16a34a" : score.light === "yellow" ? "#d97706" : "#dc2626";
+  const res = (R.basic && R.basic.resolve) || {};
+  document.getElementById("conf").textContent = res.matched
+    ? `主体：${res.recommended ? res.recommended.name : ""}（置信度 ${res.confidence || "--"}）`
+    : `主体未消歧成功（${res.confidence || "manual"}）`;
+  const eb = (R.basic && R.basic.enterprise_basic) || {};
+  const tagsEl = document.getElementById("tags");
+  if (eb.tags && eb.tags.length) tagsEl.innerHTML = eb.tags.map(t => `<span class="tag">${esc(t)}</span>`).join("");
+  if (eb.fields) {
+    const f = eb.fields;
+    document.getElementById("meta").textContent += ` · 法定代表人 ${f["法定代表人"] || "--"} · 注册资本 ${f["注册资本"] || "--"} · 成立 ${f["成立时间"] || "--"}`;
+  }
+
+  // ---- 红线表 ----
+  const rb = document.getElementById("redline-body");
+  (R.red_lines || []).forEach(rl => {
+    const map = {hit:["b-hit","🚨 命中"], unverified:["b-unverified","❓ 未验证"], clean:["b-clean","✅ 未见信号"]};
+    const [cls, label] = map[rl.status] || ["b-unverified","❓ 未验证"];
+    const ev = (rl.evidence || []).slice(0,2).map(e => link(e.url, (e.title||"").slice(0,36))).join("；") || "—";
+    rb.insertAdjacentHTML("beforeend",
+      `<tr><td>${rl.id}</td><td>${esc(rl.name)}</td><td><span class="badge ${cls}">${label}</span></td><td>${ev}</td></tr>`);
+  });
+
+  // ---- 信号 ----
+  const sg = document.getElementById("signals");
+  (R.signals || []).forEach(s => {
+    const n = (s.strong_hits || []).length;
+    const sev = s.severity || "low";
+    sg.insertAdjacentHTML("beforeend",
+      `<div class="sig-row"><span class="n"><span class="kw">${esc(s.keyword)}</span>${esc(s.category)}</span>
+       <span class="badge sev-${sev}">${sev === "severe" ? "严重" : sev === "medium" ? "中" : "低"}</span>
+       <span>${s.n_hits || 0} 条结果 / ${n} 条强信号${s.blocked ? " · ⚠️引擎被风控" : ""}</span></div>` +
+      (s.strong_hits || []).slice(0,2).map(h => `<div class="tog" style="padding-left:160px">→ ${link(h.url, (h.title||"").slice(0,60))}</div>`).join(""));
+  });
+
+  // ---- 坑点 ----
+  const pf = document.getElementById("pitfalls");
+  const pits = R.pitfalls || [];
+  if (pits.length) pf.innerHTML = "";
+  pits.forEach((p, i) => {
+    const ev = (p.evidence || []).slice(0,1).map(e => link(e.url, (e.title||"").slice(0,40))).join("") || "";
+    pf.insertAdjacentHTML("beforeend",
+      `<div class="pit"><div class="idx">${i+1}</div><div class="body"><b>${esc(p.risk)}</b>
+       <span class="kw">${esc(p.keyword || p.category)}</span><div class="ev">证据：${ev}</div></div></div>`);
+  });
+
+  // ---- 提问清单 ----
+  const qs = document.getElementById("questions");
+  (R.interview_questions || []).forEach(q => {
+    const d = document.createElement("label");
+    d.className = "check";
+    d.innerHTML = `<input type="checkbox"><span>${esc(q)}</span>`;
+    d.querySelector("input").addEventListener("change", e => d.classList.toggle("done", e.target.checked));
+    qs.appendChild(d);
+  });
+
+  // ---- 评价入口 ----
+  const rv = document.getElementById("reviews");
+  const entries = (R.reviews && R.reviews.entries) || [];
+  if (entries.length) rv.innerHTML = "";
+  entries.slice(0,10).forEach(e => {
+    rv.insertAdjacentHTML("beforeend",
+      `<div class="sig-row"><span class="badge b-clean" style="background:#eff6ff;color:#1d4ed8">${esc(e.platform || "其他")}</span>
+       <span>${link(e.url, (e.title||"").slice(0,70))}</span></div>`);
+  });
+
+  // ---- 新闻 ----
+  const nw = document.getElementById("news");
+  const items = (R.news && R.news.items) || [];
+  if (items.length) nw.innerHTML = "";
+  items.slice(0,8).forEach(it => {
+    nw.insertAdjacentHTML("beforeend",
+      `<div class="sig-row"><span>${it.is_news_domain ? "📰" : "🔗"}</span><span>${link(it.url, (it.title||"").slice(0,70))}</span></div>`);
+  });
+
+  // ---- manual_required ----
+  const mn = document.getElementById("manual");
+  const seen = new Set();
+  const addManual = item => {
+    const key = item.item || "";
+    if (seen.has(key)) return;
+    seen.add(key);
+    mn.insertAdjacentHTML("beforeend",
+      `<li><b>${esc(key)}</b>${item.what_to_check ? `<div class="what">核验点：${esc(item.what_to_check)}</div>` : ""}
+       ${item.url ? `<div class="what">入口：${link(item.url)}</div>` : ""}</li>`);
+  };
+  ((R.basic && R.basic.manual_required) || []).forEach(addManual);
+  ((R.basic && R.basic.official_checklist) || []).forEach(addManual);
+  if (!seen.size) mn.innerHTML = "<p class='empty'>无待人工核实事项（仍建议抽查官方渠道）。</p>";
+})();
+</script>
+</body>
+</html>

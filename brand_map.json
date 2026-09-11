@@ -1,0 +1,33 @@
+{
+  "_comment": "品牌名/平台简称 → 工商全称映射表。fuzzy_resolve.py 的 S1 策略，O(1) 命中。格式：品牌名 → {company: 工商全称, country: 辖区, aliases: 其他写法, note: 备注}。微调时把高频遇到的平台简称沉淀进来，命中即免搜索。注意：同一品牌下多个注册主体时 company 填家族基名，note 里说明地区差异。",
+  "美团": {
+    "company": "北京三快科技有限公司",
+    "country": "CN",
+    "aliases": ["美团点评", "meituan"],
+    "note": "美团外卖等业务多为各城市三快/三快在线主体，按地区核实。"
+  },
+  "字节跳动": {
+    "company": "北京字跳网络技术有限公司",
+    "country": "CN",
+    "aliases": ["字节", "bytedance", "抖音母公司"],
+    "note": "各业务线主体多（抖音/飞书/火山等），按 Offer 主体核实。"
+  },
+  "腾讯": {
+    "company": "深圳市腾讯计算机系统有限公司",
+    "country": "CN",
+    "aliases": ["tencent"],
+    "note": "腾讯云/游戏/微信等主体各异。"
+  },
+  "阿里巴巴": {
+    "company": "阿里巴巴（中国）网络技术有限公司",
+    "country": "CN",
+    "aliases": ["阿里", "alibaba"],
+    "note": "阿里系主体极多（本地生活/菜鸟/阿里云等），按 Offer 主体核实。"
+  },
+  "网易": {
+    "company": "网易（杭州）网络有限公司",
+    "country": "CN",
+    "aliases": ["netease"],
+    "note": "广州网易/杭州网易主体不同。"
+  }
+}
