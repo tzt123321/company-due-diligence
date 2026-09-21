@@ -24,7 +24,7 @@ SCRIPTS_DIR = SKILL_ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS_DIR))
 
 from flask import (  # type: ignore
-    Flask, request, jsonify, send_file, render_template_string,
+    Flask, request, jsonify, send_file,
     abort, Response,
 )
 
@@ -312,7 +312,8 @@ def _run_report(opts: dict) -> dict:
 
 @app.route("/")
 def index():
-    return render_template_string(INDEX_HTML)
+    # INDEX_HTML 是纯静态常量（无模板变量），直接作为 HTML 响应返回，不经模板引擎
+    return app.response_class(INDEX_HTML, mimetype="text/html")
 
 
 @app.route("/api/run", methods=["POST"])

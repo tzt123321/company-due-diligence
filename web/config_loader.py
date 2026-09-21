@@ -68,11 +68,19 @@ DEFAULT_CONFIG: dict[str, Any] = {
 }
 
 
+def _ensure_within_skill_root(path: Path) -> Path:
+    """限制配置路径必须落在 skill 根目录内，防止路径穿越读写任意文件"""
+    resolved = path.resolve()
+    if not resolved.is_relative_to(SKILL_ROOT):
+        raise ValueError(f"配置路径必须在 skill 根目录内: {resolved}")
+    return resolved
+
+
 def load_config(path: str | Path | None = None) -> dict:
     """
     加载配置：DEFAULT_CONFIG ← 用户 config.json (覆盖)
     """
-    path = Path(path) if path else DEFAULT_CONFIG_PATH
+    path = _ensure_within_skill_root(Path(path) if path else DEFAULT_CONFIG_PATH)
     cfg = copy.deepcopy(DEFAULT_CONFIG)
     if path.exists():
         try:
@@ -97,15 +105,14 @@ def _deep_merge(base: dict, override: dict) -> dict:
     return base
 
 
-def save_default_config(path: str | Path | None = None) -> Path:
-    """写出默认配置模板（首次运行用）"""
-    path = Path(path) if path else DEFAULT_CONFIG_PATH
-    if path.exists():
-        return path
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(DEFAULT_CONFIG, f, ensure_ascii=False, indent=2)
-    return path
+def save_default_config() -> Path:
+    """写出默认配置模板（首次运行用）。固定写入 skill 根目录 config.json，不接受外部路径"""
+    if DEFAULT_CONFIG_PATH.exists():
+        return DEFAULT_CONFIG_PATH
+    DEFAULT_CONFIG_PATH.write_text(
+        json.dumps(DEFAULT_CONFIG, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    return DEFAULT_CONFIG_PATH
 
 
 if __name__ == "__main__":

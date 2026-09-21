@@ -1,4 +1,6 @@
-🎉 **本 skill 是 [Linux Do](https://linux.do) 社区的友链项目** — 欢迎在 Linux Do 分享使用体验
+[![LINUX DO community](https://img.shields.io/badge/LINUX%20DO-community-orange?labelColor=000000)](https://linux.do)
+
+🎉 **本 skill 是 Linux Do 社区的友链项目** — 欢迎在 Linux Do 分享使用体验
 
 # company-due-diligence · 公司求职风险背调 Skill
 
